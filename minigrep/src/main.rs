@@ -1,6 +1,7 @@
 use std::env;
-use std::fs;
 use std::process;
+use minigrep::Config;
+use minigrep::run;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -9,23 +10,17 @@ fn main() {
         process::exit(1);
     });
 
+    //unwarp写法
+    //run(config).unwrap_or_else(|err| {
+    //    println!("Application error: {}", err);
+    //    process::exit(1);
+    //});
 
-
-}
-
-struct Config {
-    query: String,
-    filename: String,
-}
-
-impl Config{
-    fn build(args: &Vec<String>) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Ok(Config { query, filename })
+    //不利用正确时的返回值
+    if let Err(e) = run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
     }
+
 }
+
